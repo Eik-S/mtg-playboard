@@ -16,6 +16,17 @@ const globalStyles = css`
   code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
   }
+
+  button {
+    border: 6px solid black;
+    border-radius: 12px;
+    background-color: transparent;
+    font-size: 24px;
+    font-weight: 900;
+    line-height: 24px;
+    text-transform: uppercase;
+    padding: 8px 16px;
+  }
 `
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
