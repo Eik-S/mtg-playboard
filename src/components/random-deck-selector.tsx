@@ -13,11 +13,13 @@ export function RandomDeckSelector() {
   const [players, setPlayers] = useState<Player[]>([
     { name: 'Sörski', randomDecks: [] },
     { name: 'Eiksen', randomDecks: [] },
+    { name: 'Mellskin', randomDecks: [] },
   ])
 
   const { collectedDecks } = useDecklistContext()
 
   function showRandomDecks() {
+    const alreadyChosenDecks: Deck[] = []
     players.forEach((player, index) => {
       let selectionsMade = 0
       let selectedDecks: Deck[] = []
@@ -25,8 +27,9 @@ export function RandomDeckSelector() {
         const randomDeckIndex = Math.floor(Math.random() * collectedDecks.length)
         const randomDeck = collectedDecks[randomDeckIndex]
         if (selectedDecks.length === 1 && randomDeck.mana === selectedDecks[0].mana) continue
-        if (!selectedDecks.includes(randomDeck)) {
+        if (!alreadyChosenDecks.includes(randomDeck)) {
           selectedDecks.push(randomDeck)
+          alreadyChosenDecks.push(randomDeck)
           selectionsMade++
         }
       }
