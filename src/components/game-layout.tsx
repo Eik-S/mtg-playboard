@@ -1,5 +1,5 @@
 import { css } from '@emotion/react'
-import { ReactNode } from 'react'
+import { ReactNode, useCallback } from 'react'
 
 interface GameBoardProps {
   numOfPlayers: number

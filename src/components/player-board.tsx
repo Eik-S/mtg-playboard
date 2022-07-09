@@ -7,9 +7,11 @@ export interface Player {
   color: string
 }
 
-export interface PlayerBoardProps extends Player {}
+export interface PlayerBoardProps extends Player {
+  layoutRotation: number
+}
 
-export function PlayerBoard({ color, randomDecks, ...props }: PlayerBoardProps) {
+export function PlayerBoard({ color, randomDecks, layoutRotation, ...props }: PlayerBoardProps) {
   const [deckName, setDeckName] = useState('')
   const [lifePoints, setLifePoints] = useState(20)
   const [touchStartPoint, setTouchStartPoint] = useState<{ x: number; y: number } | undefined>(
@@ -34,18 +36,38 @@ export function PlayerBoard({ color, randomDecks, ...props }: PlayerBoardProps) 
   }, [randomDecks])
 
   function handleTouchStart(event: TouchEvent | undefined) {
-    console.log('handle touch start')
     if (event === undefined) return
     setTouchStartPoint({ x: event.touches[0].pageX, y: event.touches[0].pageY })
   }
 
   function handleTouchMove(event: TouchEvent | undefined) {
-    console.log('handle touch move')
     if (event === undefined || touchStartPoint === undefined) return
-    const offsetX = -(touchStartPoint.x - event.touches[0].pageX)
-    const offsetY = touchStartPoint.y - event.touches[0].pageY
+    const offsetX = (() => {
+      switch (layoutRotation) {
+        case 180:
+          return touchStartPoint.x - event.touches[0].pageX
+        case 90:
+          return touchStartPoint.y - event.touches[0].pageY
+        case -90:
+          return -(touchStartPoint.y - event.touches[0].pageY)
+        default:
+          return -(touchStartPoint.x - event.touches[0].pageX)
+      }
+    })()
+    const offsetY = (() => {
+      switch (layoutRotation) {
+        case 180:
+          return -(touchStartPoint.y - event.touches[0].pageY)
+        case 90:
+          return touchStartPoint.x - event.touches[0].pageX
+        case -90:
+          return -(touchStartPoint.x - event.touches[0].pageX)
+        default:
+          return touchStartPoint.y - event.touches[0].pageY
+      }
+    })()
 
-    setTouchMoveLifePoints(Math.floor((offsetX + offsetY) / 10))
+    setTouchMoveLifePoints(Math.floor((offsetX + offsetY) / 20))
   }
 
   function handleTouchEnd() {
