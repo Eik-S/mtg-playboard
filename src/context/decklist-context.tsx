@@ -4,11 +4,19 @@ import { useLocalStorage } from '../hooks/use-local-storage'
 
 type Mana = 'plains' | 'swamp' | 'mountain' | 'forest' | 'island' | 'multi'
 type Rarity = 'common' | 'rare' | 'mythic'
-
+export type WordType = 'adjective' | 'noun' | 'suffix'
 export interface Deck {
   name: string
   mana: Mana
   rarity: Rarity
+  wordType: WordType
+}
+
+const exampleDeck: Deck = {
+  mana: 'forest',
+  name: 'foo',
+  rarity: 'common',
+  wordType: 'adjective',
 }
 
 interface DecklistApi {
@@ -28,7 +36,9 @@ function useDecklist() {
   useEffect(() => {
     const storedCollectedDecks = getLocalStorage<Deck[]>('collectedDecks')
     if (storedCollectedDecks) {
-      setCollectedDecks(storedCollectedDecks)
+      const storedDeckNames = storedCollectedDecks.map((deck) => deck.name)
+      const upToDateDecks = jumpstartDecks.filter((deck) => storedDeckNames.includes(deck.name))
+      setCollectedDecks(upToDateDecks)
     }
   }, [getLocalStorage])
 

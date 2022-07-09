@@ -7,6 +7,7 @@ import { css, Global } from '@emotion/react'
 const globalStyles = css`
   body {
     margin: 0;
+    background-color: #666;
     font-family: 'Arial Rounded MT Bold', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
       'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
     -webkit-font-smoothing: antialiased;
@@ -20,12 +21,13 @@ const globalStyles = css`
   button {
     border: 6px solid black;
     border-radius: 12px;
-    background-color: transparent;
-    font-size: 24px;
+    background-color: #ffffff;
+    font-size: 16px;
     font-weight: 900;
     line-height: 24px;
     text-transform: uppercase;
-    padding: 8px 16px;
+    padding: 4px 12px;
+    margin: 0 12px;
   }
 `
 

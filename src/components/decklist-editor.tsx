@@ -5,13 +5,13 @@ interface DecklistEditorProps {
   onCloseDecklistEditor: () => void
 }
 
-export function DecklistEditor({ onCloseDecklistEditor }: DecklistEditorProps) {
+export function DecklistEditor({ onCloseDecklistEditor, ...props }: DecklistEditorProps) {
   const { availableDecks, collectedDecks, addDeck, removeDeck, selectAllDecks, removeAllDecks } =
     useDecklistContext()
   const collectedDeckNames = collectedDecks.map((deck) => deck.name)
 
   return (
-    <div css={styles.decklistEditorWrapper}>
+    <div css={styles.decklistEditorWrapper} {...props}>
       <div css={styles.curtain} onClick={() => onCloseDecklistEditor()} />
       <div css={styles.deckSelectionPane}>
         <ul css={styles.deckList}>
