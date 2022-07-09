@@ -14,6 +14,15 @@ const globalStyles = css`
     -moz-osx-font-smoothing: grayscale;
   }
 
+  * {
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Old versions of Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
+  }
+
   code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
   }
@@ -33,6 +42,13 @@ const globalStyles = css`
 `
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
+
+// disable scrolling/panning
+document.body.addEventListener('touchmove', (e: Event) => e.preventDefault(), {
+  passive: false,
+  capture: false,
+})
+
 root.render(
   <React.StrictMode>
     <Global styles={globalStyles} />
