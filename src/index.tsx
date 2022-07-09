@@ -28,6 +28,7 @@ const globalStyles = css`
     text-transform: uppercase;
     padding: 4px 12px;
     margin: 0 12px;
+    color: black;
   }
 `
 
