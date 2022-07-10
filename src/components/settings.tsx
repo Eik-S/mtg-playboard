@@ -174,14 +174,17 @@ const styles = {
     padding: 24px;
   `,
   section: css`
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    row-gap: 18px;
+    display: flex;
+    flex-wrap: wrap;
+    row-gap: 24px;
     column-gap: 32px;
     justify-items: center;
+    justify-content: center;
   `,
   gameModeButtons: css`
     display: flex;
+    flex-wrap: wrap;
+    row-gap: 24px;
     justify-content: space-evenly;
   `,
   ruler: css`
