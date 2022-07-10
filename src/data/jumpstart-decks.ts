@@ -161,7 +161,7 @@ export const jumpstartDecks: Deck[] = [
     name: 'Doctor',
     mana: 'plains',
     rarity: 'common',
-    wordType: 'noun',
+    wordType: 'prenoun',
   },
   {
     name: 'Feathered Friends',

@@ -1,18 +1,36 @@
 import { css } from '@emotion/react'
-import { ReactNode, useCallback } from 'react'
+import { Fragment, ReactNode } from 'react'
+import { useGameContext } from '../context/game-context'
 
 interface GameBoardProps {
   numOfPlayers: number
   children: ReactNode
-  settings: ReactNode
+  onClickSettingsButton: () => void
 }
 
-export function GameBoard({ numOfPlayers, children, settings }: GameBoardProps) {
+export function GameBoard({ numOfPlayers, children, onClickSettingsButton }: GameBoardProps) {
   return (
     <div css={styles.gameBoard(numOfPlayers)}>
       {children}
-      <div css={styles.midPanel(numOfPlayers)}>{settings}</div>
+      <div css={styles.midPanelButtons(numOfPlayers)}>
+        <GameBoardButtons onClickSettingsButton={onClickSettingsButton} />
+      </div>
     </div>
+  )
+}
+
+interface GameBoardButtonsProps {
+  onClickSettingsButton: () => void
+}
+
+function GameBoardButtons({ onClickSettingsButton }: GameBoardButtonsProps) {
+  const { startNewGame } = useGameContext()
+
+  return (
+    <Fragment>
+      <button onClick={() => startNewGame()}>New Game</button>
+      <button onClick={() => onClickSettingsButton()}>Settings</button>
+    </Fragment>
   )
 }
 
@@ -214,9 +232,8 @@ const styles = {
       }
     `}
   `,
-  midPanel: (numberOfPlayers: number) => css`
-    grid-row: 1 / span 3;
-    grid-column: 1 / span 3;
+  midPanelButtons: (numberOfPlayers: number) => css`
+    position: absolute;
     justify-self: center;
     align-self: center;
     z-index: 1;

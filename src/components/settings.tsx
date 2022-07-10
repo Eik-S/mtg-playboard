@@ -1,44 +1,110 @@
-import { Fragment, useState } from 'react'
-import { Deck, useDecklistContext } from '../context/decklist-context'
+import { css } from '@emotion/react'
+import { Fragment } from 'react'
+import { useGameContext } from '../context/game-context'
 import { DecklistEditor } from './decklist-editor'
 
 interface SettingsProps {
-  numberOfPlayers: number
-  onSelectedRandomDecks: (randomDecks: Deck[][]) => void
+  settingsOpen: boolean
+  onClickCurtain: () => void
 }
 
-export function Settings({ numberOfPlayers, onSelectedRandomDecks }: SettingsProps) {
-  const [isDecklistEditorOpen, setIsDecklistEditorOpen] = useState(false)
-
-  const { collectedDecks } = useDecklistContext()
-
-  function generateRandomDecks() {
-    const randomDecks: Deck[][] = []
-    const unavailableDecks: Deck[] = []
-    for (let i = 0; i < numberOfPlayers; i++) {
-      let selectedDecks: Deck[] = []
-      while (selectedDecks.length < 2) {
-        const randomDeckIndex = Math.floor(Math.random() * collectedDecks.length)
-        const randomDeck = collectedDecks[randomDeckIndex]
-        if (selectedDecks.length === 1 && randomDeck.mana === selectedDecks[0].mana) continue
-        if (!unavailableDecks.includes(randomDeck)) {
-          selectedDecks.push(randomDeck)
-          unavailableDecks.push(randomDeck)
-        }
-      }
-      randomDecks.push(selectedDecks)
-    }
-
-    onSelectedRandomDecks(randomDecks)
-  }
+export function Settings({ settingsOpen, onClickCurtain }: SettingsProps) {
+  const { numberOfPlayers, numberOfRandomDecks, setNumberOfPlayers, setNumberOfRandomDecks } =
+    useGameContext()
 
   return (
     <Fragment>
-      <button onClick={() => generateRandomDecks()}>New Game</button>
-      <button onClick={() => setIsDecklistEditorOpen(true)}>Edit Decks</button>
-      {isDecklistEditorOpen && (
-        <DecklistEditor onCloseDecklistEditor={() => setIsDecklistEditorOpen(false)} />
+      {settingsOpen && (
+        <div css={styles.settingsPaneWrapper}>
+          <div css={styles.curtain} onClick={() => onClickCurtain()} />
+          <div css={styles.settingsPane}>
+            <div css={styles.ruler}>Game Settings</div>
+            <div css={styles.section}>
+              <div css={styles.plusMinus}>
+                <label>Number of Players</label>
+                <button
+                  onClick={() => setNumberOfPlayers((prev) => prev - 1)}
+                  disabled={numberOfPlayers === 2}
+                >
+                  -
+                </button>
+                <span>{numberOfPlayers}</span>
+                <button
+                  onClick={() => setNumberOfPlayers((prev) => prev + 1)}
+                  disabled={numberOfPlayers === 4}
+                >
+                  +
+                </button>
+              </div>
+              <div css={styles.plusMinus}>
+                <label>Number of Jumpstart Decks</label>
+                <button
+                  onClick={() => setNumberOfRandomDecks((prev) => prev - 1)}
+                  disabled={numberOfRandomDecks === 1}
+                >
+                  -
+                </button>
+                <span>{numberOfRandomDecks}</span>
+                <button
+                  onClick={() => setNumberOfRandomDecks((prev) => prev + 1)}
+                  disabled={numberOfRandomDecks === 4}
+                >
+                  +
+                </button>
+              </div>
+            </div>
+            <div css={styles.ruler}>Collected Jumpstart Decks</div>
+            <DecklistEditor />
+          </div>
+        </div>
       )}
     </Fragment>
   )
+}
+
+const styles = {
+  settingsPaneWrapper: css`
+    position: fixed;
+    z-index: 2;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  `,
+  curtain: css`
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    z-index: 1;
+  `,
+  settingsPane: css`
+    z-index: 2;
+    width: 80vw;
+    height: 80vh;
+    background-color: #ffffffee;
+    border: 12px solid black;
+    overflow-y: auto;
+    padding: 24px;
+  `,
+  section: css`
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    row-gap: 18px;
+    column-gap: 32px;
+  `,
+  ruler: css`
+    margin: 32px 0;
+    border-top: 8px solid black;
+    font-size: 18px;
+    text-align: center;
+  `,
+  plusMinus: css`
+    label {
+      margin-right: 12px;
+    }
+  `,
 }

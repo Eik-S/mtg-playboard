@@ -38,6 +38,12 @@ const globalStyles = css`
     padding: 4px 12px;
     margin: 0 12px;
     color: black;
+    cursor: pointer;
+    &:disabled {
+      cursor: default;
+      color: #00000066;
+      border-color: #00000066;
+    }
   }
 `
 

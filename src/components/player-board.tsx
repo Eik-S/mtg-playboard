@@ -25,8 +25,9 @@ export function PlayerBoard({ color, randomDecks, layoutRotation, ...props }: Pl
       .sort((a: Deck, b: Deck) => {
         const wordTypeOrder: Record<WordType, number> = {
           adjective: 0,
-          noun: 1,
-          suffix: 2,
+          prenoun: 1,
+          noun: 2,
+          suffix: 3,
         }
         return wordTypeOrder[a.wordType] - wordTypeOrder[b.wordType]
       })
