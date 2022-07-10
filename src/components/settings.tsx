@@ -1,5 +1,5 @@
 import { css } from '@emotion/react'
-import { Fragment } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { useGameContext } from '../context/game-context'
 import { DecklistEditor } from './decklist-editor'
 
@@ -8,7 +8,20 @@ interface SettingsProps {
   onClickCurtain: () => void
 }
 
+interface BeforeInstallPromptEvent extends Event {
+  readonly platforms: string[]
+  readonly userChoice: Promise<{
+    outcome: 'accepted' | 'dismissed'
+    platform: string
+  }>
+  prompt(): Promise<void>
+}
+
 export function Settings({ settingsOpen, onClickCurtain }: SettingsProps) {
+  const [installableEvent, setInstallableEvent] = useState<BeforeInstallPromptEvent | undefined>(
+    undefined,
+  )
+
   const {
     numberOfPlayers,
     numberOfRandomDecks,
@@ -20,12 +33,37 @@ export function Settings({ settingsOpen, onClickCurtain }: SettingsProps) {
     setGameMode,
   } = useGameContext()
 
+  useEffect(() => {
+    window.addEventListener('beforeinstallprompt', (e: BeforeInstallPromptEvent) => {
+      e.preventDefault()
+      setInstallableEvent(e)
+    })
+  }, [])
+
+  function handleClickInstall() {
+    if (installableEvent === undefined) return
+
+    installableEvent.prompt()
+
+    installableEvent.userChoice.then((choiceResult) => {
+      if (choiceResult.outcome === 'accepted') {
+        console.log('User accepted the PWA prompt')
+        setInstallableEvent(undefined)
+      } else {
+        console.log('User dismissed the PWA prompt')
+      }
+    })
+  }
+
   return (
     <Fragment>
       {settingsOpen && (
         <div css={styles.settingsPaneWrapper}>
           <div css={styles.curtain} onClick={() => onClickCurtain()} />
           <div css={styles.settingsPane}>
+            {installableEvent && (
+              <button onClick={() => handleClickInstall()}>Install on your device</button>
+            )}
             <div css={styles.ruler}>Game Mode</div>
             <div css={styles.gameModeButtons}>
               <button

@@ -1,11 +1,13 @@
 {
   "short_name": "MTG PlayBoard",
   "name": "MTG PlayBoard",
+  "description": "MTG Lifecounter with different game modes like jumpstart and commander.",
+  "lang": "en-US",
   "icons": [
     {
       "src": "favicon.png",
-      "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/x-icon"
+      "type": "image/png",
+      "sizes": "64x64 32x32 24x24 16x16"
     },
     {
       "src": "favicon@2x.png",
@@ -20,6 +22,6 @@
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#9399ff",
-  "background_color": "#ffbcbc"
+  "theme_color": "#ffbcbc",
+  "background_color": "black"
 }
