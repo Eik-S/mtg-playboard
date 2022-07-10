@@ -8,6 +8,7 @@ const globalStyles = css`
   body {
     margin: 0;
     background-color: #666;
+    touch-action: none;
     font-family: 'Arial Rounded MT Bold', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
       'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
     -webkit-font-smoothing: antialiased;
@@ -49,12 +50,6 @@ const globalStyles = css`
 `
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
-
-// disable scrolling/panning
-document.body.addEventListener('touchmove', (e: Event) => e.preventDefault(), {
-  passive: false,
-  capture: false,
-})
 
 root.render(
   <React.StrictMode>
