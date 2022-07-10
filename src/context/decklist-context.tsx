@@ -23,9 +23,9 @@ interface DecklistApi {
 }
 
 function useDecklist() {
-  const [collectedDecks, setCollectedDecks] = useState<Deck[]>([])
-  const { getLocalStorage, setLocalStorage } = useLocalStorage()
   const availableDecks = jumpstartDecks
+  const [collectedDecks, setCollectedDecks] = useState<Deck[]>(availableDecks)
+  const { getLocalStorage, setLocalStorage } = useLocalStorage()
 
   useEffect(() => {
     const storedCollectedDecks = getLocalStorage<Deck[]>('collectedDecks')
