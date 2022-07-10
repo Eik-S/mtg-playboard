@@ -167,7 +167,7 @@ const styles = {
   settingsPane: css`
     z-index: 2;
     width: 80vw;
-    height: 80vh;
+    max-height: 70vh;
     background-color: #ffffffee;
     border: 12px solid black;
     overflow-y: auto;
