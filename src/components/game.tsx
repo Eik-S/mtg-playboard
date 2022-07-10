@@ -5,7 +5,7 @@ import { GameBoard, PlayerWrapper } from './game-layout'
 import { PlayerBoard } from './player-board'
 import { Settings } from './settings'
 
-export function RandomDeckSelector() {
+export function Game() {
   const { getPlayerRotation } = useGameBoardRotation()
   const { players } = useGameContext()
   const [settingsOpen, setSettingsOpen] = useState(false)
@@ -15,9 +15,13 @@ export function RandomDeckSelector() {
       {settingsOpen && (
         <Settings settingsOpen={settingsOpen} onClickCurtain={() => setSettingsOpen(false)} />
       )}
-      {players.map((player, id) => (
-        <PlayerWrapper numOfPlayers={players.length} playerId={id} key={id}>
-          <PlayerBoard {...player} layoutRotation={getPlayerRotation(id + 1, players.length)} />
+      {players.map((player, index) => (
+        <PlayerWrapper numOfPlayers={players.length} playerId={index + 1} key={index}>
+          <PlayerBoard
+            {...player}
+            playerId={index + 1}
+            layoutRotation={getPlayerRotation(index + 1, players.length)}
+          />
         </PlayerWrapper>
       ))}
     </GameBoard>

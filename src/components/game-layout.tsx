@@ -42,9 +42,9 @@ interface PlayerWrapperProps {
 
 export function PlayerWrapper({ playerId, numOfPlayers, children }: PlayerWrapperProps) {
   return (
-    <div className={`player-${playerId + 1}-wrapper`}>
+    <div className={`player-${playerId}-wrapper`}>
       <div
-        css={styles.rotatedInnerWrapper(numOfPlayers, playerId + 1)}
+        css={styles.rotatedInnerWrapper(numOfPlayers, playerId)}
         className="rotated-inner-wrapper"
       >
         {children}
@@ -233,7 +233,8 @@ const styles = {
     `}
   `,
   midPanelButtons: (numberOfPlayers: number) => css`
-    position: absolute;
+    grid-column: 1 / span 4;
+    grid-row: 1 / span 4;
     justify-self: center;
     align-self: center;
     z-index: 1;

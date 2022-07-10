@@ -11,27 +11,32 @@ import { Player } from '../components/player-board'
 import { useColors } from '../hooks/use-colors'
 import { useDecklistContext } from './decklist-context'
 
-type GameMode = 'jumpstart'
+type GameMode = 'jumpstart' | 'normal' | 'commander'
 
 interface GameApi {
   players: Player[]
   startingLife: number
   numberOfPlayers: number
   numberOfRandomDecks: number
+  gameMode: GameMode
   startNewGame: () => void
   setNumberOfPlayers: Dispatch<SetStateAction<number>>
   setNumberOfRandomDecks: Dispatch<SetStateAction<number>>
+  updateLifePoints: (playerIndex: number, lifePoints: number) => void
+  setStartingLife: Dispatch<SetStateAction<number>>
+  setGameMode: Dispatch<SetStateAction<GameMode>>
 }
 
 function useGameState() {
-  const [gameMode] = useState<GameMode>('jumpstart')
-  const [startingLife] = useState(20)
+  const [gameMode, setGameMode] = useState<GameMode>('jumpstart')
+  const [startingLife, setStartingLife] = useState(20)
   const [numberOfPlayers, setNumberOfPlayers] = useState(2)
   const [players, setPlayers] = useState<Player[]>([])
   const [numberOfRandomDecks, setNumberOfRandomDecks] = useState(2)
   const { generateRandomDecks } = useDecklistContext()
   const { getRandomColor } = useColors()
 
+  // initialization
   useEffect(() => {
     function initPlayers(numberOfPlayers: number): Player[] {
       const p = []
@@ -39,6 +44,7 @@ function useGameState() {
         p.push({
           color: getRandomColor(),
           randomDecks: [],
+          lifePoints: startingLife,
         })
       }
       return p
@@ -55,15 +61,44 @@ function useGameState() {
       }
       return prevPlayers
     })
-  }, [getRandomColor, numberOfPlayers])
+  }, [getRandomColor, numberOfPlayers, startingLife])
+
+  // gameMode specific settings
+  useEffect(() => {
+    if (gameMode !== 'jumpstart') {
+      setPlayers((prevPlayers) => prevPlayers.map((player) => ({ ...player, randomDecks: [] })))
+    }
+
+    if (gameMode === 'commander') {
+      setStartingLife(40)
+    }
+
+    if (gameMode === 'normal') {
+      setStartingLife(20)
+    }
+  }, [gameMode])
 
   function handleStartNewGame() {
     if (gameMode === 'jumpstart') {
       const randomDecks = generateRandomDecks(numberOfPlayers, numberOfRandomDecks)
       setPlayers((prevPlayers) => {
-        return prevPlayers.map((player, index) => ({ ...player, randomDecks: randomDecks[index] }))
+        return prevPlayers.map((player, index) => ({
+          ...player,
+          randomDecks: randomDecks[index],
+        }))
       })
     }
+    setPlayers((prevPlayers) =>
+      prevPlayers.map((player) => ({ ...player, lifePoints: startingLife })),
+    )
+  }
+
+  function updateLifePoints(playerId: number, lifePoints: number) {
+    setPlayers((prevPlayers) => {
+      const newPlayers = [...prevPlayers]
+      newPlayers[playerId - 1].lifePoints = lifePoints
+      return newPlayers
+    })
   }
 
   return {
@@ -71,9 +106,13 @@ function useGameState() {
     startingLife,
     numberOfPlayers,
     numberOfRandomDecks,
+    gameMode,
     startNewGame: handleStartNewGame,
     setNumberOfPlayers,
     setNumberOfRandomDecks,
+    updateLifePoints,
+    setStartingLife,
+    setGameMode,
   }
 }
 

@@ -39,7 +39,8 @@ const globalStyles = css`
     margin: 0 12px;
     color: black;
     cursor: pointer;
-    &:disabled {
+    &:disabled,
+    &.unchecked {
       cursor: default;
       color: #00000066;
       border-color: #00000066;

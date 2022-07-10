@@ -1,19 +1,29 @@
 import { css } from '@emotion/react'
 import { TouchEvent, useEffect, useState } from 'react'
 import { Deck, WordType } from '../context/decklist-context'
+import { useGameContext } from '../context/game-context'
 
 export interface Player {
   randomDecks: Deck[]
   color: string
+  lifePoints: number
 }
 
 export interface PlayerBoardProps extends Player {
+  playerId: number
   layoutRotation: number
 }
 
-export function PlayerBoard({ color, randomDecks, layoutRotation, ...props }: PlayerBoardProps) {
+export function PlayerBoard({
+  playerId,
+  color,
+  randomDecks,
+  lifePoints,
+  layoutRotation,
+  ...props
+}: PlayerBoardProps) {
+  const { updateLifePoints } = useGameContext()
   const [deckName, setDeckName] = useState('')
-  const [lifePoints, setLifePoints] = useState(20)
   const [touchStartPoint, setTouchStartPoint] = useState<{ x: number; y: number } | undefined>(
     undefined,
   )
@@ -71,6 +81,10 @@ export function PlayerBoard({ color, randomDecks, layoutRotation, ...props }: Pl
     setTouchMoveLifePoints(Math.floor((offsetX + offsetY) / 20))
   }
 
+  function setLifePoints(newValue: number) {
+    updateLifePoints(playerId, newValue)
+  }
+
   function handleTouchEnd() {
     setTouchStartPoint(undefined)
     if (touchMoveLifePoints !== undefined) {
@@ -90,7 +104,7 @@ export function PlayerBoard({ color, randomDecks, layoutRotation, ...props }: Pl
       >
         <button
           css={css([styles.decreaseButton, styles.invisibleButton])}
-          onClick={() => setLifePoints((p) => p - 1)}
+          onClick={() => setLifePoints(lifePoints - 1)}
         ></button>
         <div css={styles.lifePointsDisplay}>
           {touchMoveLifePoints !== undefined && (
@@ -103,7 +117,7 @@ export function PlayerBoard({ color, randomDecks, layoutRotation, ...props }: Pl
         </div>
         <button
           css={css([styles.increaseButton, styles.invisibleButton])}
-          onClick={() => setLifePoints((p) => p + 1)}
+          onClick={() => setLifePoints(lifePoints + 1)}
         ></button>
       </div>
     </div>
