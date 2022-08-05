@@ -17,11 +17,20 @@ export function useGameBoardRotation() {
 
   function getPlayerRotation(playerId: number, numOfPlayers: number): number {
     if (numOfPlayers === 2) {
-      switch (playerId) {
-        case 1:
-          return 180
-        default:
-          return 0
+      if (orientation === 'portrait') {
+        switch (playerId) {
+          case 1:
+            return 180
+          default:
+            return 0
+        }
+      } else {
+        switch (playerId) {
+          case 1:
+            return -90
+          default:
+            return 90
+        }
       }
     }
     if (numOfPlayers === 3) {

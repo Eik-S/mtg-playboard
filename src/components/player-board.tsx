@@ -132,7 +132,7 @@ const styles = {
     border: 10px solid rgba(255, 255, 255, 0.7);
     box-sizing: border-box;
     display: grid;
-    grid-template-rows: auto 1fr;
+    grid-template-rows: 80px 1fr;
     justify-items: center;
   `,
   deckName: css`
