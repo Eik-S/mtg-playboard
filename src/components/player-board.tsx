@@ -30,7 +30,9 @@ export function PlayerBoard({
   const [touchMoveLifePoints, setTouchMoveLifePoints] = useState<number | undefined>(undefined)
 
   useEffect(() => {
-    if (randomDecks === []) return
+    if (randomDecks.length === 0) {
+      setDeckName('')
+    }
     const sortedDeckNames = randomDecks
       .sort((a: Deck, b: Deck) => {
         const wordTypeOrder: Record<WordType, number> = {

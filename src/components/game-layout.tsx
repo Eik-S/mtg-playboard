@@ -56,6 +56,11 @@ export function PlayerWrapper({ playerId, numOfPlayers, children }: PlayerWrappe
 const styles = {
   gameBoard: (numberOfPlayers: number) => css`
     height: 100vh;
+
+    @supports (height: 100dvh) {
+      height: 100dvh;
+    }
+
     display: grid;
 
     ${numberOfPlayers === 4 &&

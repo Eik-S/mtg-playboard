@@ -7,6 +7,7 @@ import {
   useEffect,
   useState,
 } from 'react'
+import { start } from 'repl'
 import { Player } from '../components/player-board'
 import { useColors } from '../hooks/use-colors'
 import { useDecklistContext } from './decklist-context'
@@ -63,18 +64,42 @@ function useGameState() {
     })
   }, [getRandomColor, numberOfPlayers, startingLife])
 
-  // gameMode specific settings
+  // gameMode specific resets on game mode change
   useEffect(() => {
+    const commanderStartingLife = 40
+    const normalStartingLife = 20
+
     if (gameMode !== 'jumpstart') {
-      setPlayers((prevPlayers) => prevPlayers.map((player) => ({ ...player, randomDecks: [] })))
+      setStartingLife(normalStartingLife)
+      setPlayers((prevPlayers) =>
+        prevPlayers.map((player) => ({
+          ...player,
+          randomDecks: [],
+          lifePoints: normalStartingLife,
+        })),
+      )
     }
 
     if (gameMode === 'commander') {
-      setStartingLife(40)
+      setStartingLife(commanderStartingLife)
+      setPlayers((prevPlayers) =>
+        prevPlayers.map((player) => ({
+          ...player,
+          randomDecks: [],
+          lifePoints: commanderStartingLife,
+        })),
+      )
     }
 
     if (gameMode === 'normal') {
-      setStartingLife(20)
+      setStartingLife(normalStartingLife)
+      setPlayers((prevPlayers) =>
+        prevPlayers.map((player) => ({
+          ...player,
+          randomDecks: [],
+          lifePoints: normalStartingLife,
+        })),
+      )
     }
   }, [gameMode])
 
