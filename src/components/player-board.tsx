@@ -1,6 +1,5 @@
 import { css } from '@emotion/react'
 import { TouchEvent, useEffect, useState } from 'react'
-import { ScreenCornerRadius } from 'react-native-screen-corner-radius'
 import { Deck, WordType } from '../context/decklist-context'
 import { useGameContext } from '../context/game-context'
 
@@ -97,7 +96,7 @@ export function PlayerBoard({
   }
 
   return (
-    <div css={styles.board({ color, isBottomPlayboard: layoutRotation === 0 })} {...props}>
+    <div css={styles.board(color)} {...props}>
       <h2 css={styles.deckName}>{deckName}</h2>
       <div
         css={styles.lifePointsPanel}
@@ -128,7 +127,7 @@ export function PlayerBoard({
 }
 
 const styles = {
-  board: ({ color, isBottomPlayboard }: { color: string; isBottomPlayboard: boolean }) => css`
+  board: (color: string) => css`
     background-color: ${color};
     width: 100%;
     height: 100%;
@@ -137,14 +136,6 @@ const styles = {
     display: grid;
     grid-template-rows: 80px 1fr;
     justify-items: center;
-
-    ${isBottomPlayboard &&
-    css`
-      @media (orientation: portrait) {
-        border-bottom-left-radius: ${ScreenCornerRadius};
-        border-bottom-right-radius: ${ScreenCornerRadius};
-      }
-    `}
   `,
   deckName: css`
     font-size: 32px;
